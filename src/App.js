@@ -13,6 +13,7 @@ function App() {
         <div>
             <SingleSlider
                 data={arr}
+                timeout={5000}
             />
         </div>
     );

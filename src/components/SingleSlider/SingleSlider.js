@@ -3,16 +3,31 @@ import './SingleSlider.scss';
 
 
 function SingleSlider(props) {
-    const {data} = props;
+    const {data, timeout = 2000} = props;
     const [current, setCurrent] = useState(0);
 
 
+    let carouselInterval = null;
+
+    useEffect(() => {
+        carouselInterval = setTimeout(
+            () => {
+                setCurrent(current === data.length - 1 ? 0 : current + 1)
+
+            },
+            timeout,
+        )
+
+    }, [current])
+
+
     function goLeft() {
+        clearInterval(carouselInterval);
         current === 0 ? setCurrent(data.length - 1) : setCurrent(current - 1);
     }
 
     function goRight() {
-
+        clearInterval(carouselInterval);
         current === data.length - 1 ? setCurrent(0) : setCurrent(current + 1);
     }
 
@@ -52,7 +67,10 @@ function SingleSlider(props) {
                         return (
                             <button
                                 key={index}
-                                onClick={() => setCurrent(index)}
+                                onClick={() => {
+                                    clearInterval(carouselInterval);
+                                    setCurrent(index)
+                                }}
                                 className={
                                     current === index ? "carousel__indicator current-slide" : "carousel__indicator"
                                 }/>
